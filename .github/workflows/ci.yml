@@ -36,11 +36,11 @@ jobs:
           ./Aut2exe.exe /in "input/input.au3" /out output/input.exe /icon input/input.ico /comp 4 /x64
 
       - name: Dynamically set MY_DATE environment variable
-        run: echo "RUNNING_DATE=`date`" >> $GITHUB_ENV
+        run: echo "RELEASE_DATE=$(date --rfc-3339=date)" >> ${GITHUB_ENV}
 
       - name: Upload
         uses: actions/upload-artifact@v2
         with:
-          name: AutoITBuilder_${{ env.RUNNING_DATE }}
+          name: AutoITBuilder_${{ env.RELEASE_DATE }}
           path: C:\Program Files (x86)\AutoIt3\Aut2Exe\output
           if-no-files-found: error
