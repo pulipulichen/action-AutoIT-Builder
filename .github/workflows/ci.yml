@@ -15,8 +15,11 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
 
+      # ----------------------------------------------------------------
+
       - name: Prepare files
         run: |
+          ls .
           mkdir C:\"Program Files (x86)"\AutoIt3\Aut2Exe\input
           mkdir C:\"Program Files (x86)"\AutoIt3\Aut2Exe\output
           Copy-Item "input\*" -Destination C:\"Program Files (x86)"\AutoIt3\Aut2Exe\input
@@ -25,7 +28,8 @@ jobs:
 
       - name: Install Autoit
         run: |
-          ./compiler/autoit-v3-setup.exe /S
+          cd compiler
+          ./autoit-v3-setup.exe /S
 
       - name: Compile
         run: |
