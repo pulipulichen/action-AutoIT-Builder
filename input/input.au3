@@ -1,8 +1,8 @@
 #include <MsgBoxConstants.au3>
 #include <FileConstants.au3>
 
-Global $sPROJECT_NAME = "docker-app-Local-Text-Similarity-Analysis"
-Global $sFILE_EXT = "Images (*.*)"
+Global $sPROJECT_NAME = "docker-app-PDF-to-Images"
+Global $sFILE_EXT = "PDF (*.pdf)"
 
 ;~ MsgBox($MB_SYSTEMMODAL, "Title", "This message box will timeout after 10 seconds or select the OK button.", 10)
 Local $sWorkingDir = @WorkingDir
