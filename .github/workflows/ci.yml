@@ -17,18 +17,18 @@ jobs:
 
       # ----------------------------------------------------------------
 
-      - name: Cache
-        id: cache
-        uses: actions/cache@v3
-        env:
-          cache-name: cache
-        with:
-          path: C:\"Program Files (x86)"\AutoIt3\Aut2Exe\
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('C:\"Program Files (x86)"\AutoIt3\Aut2Exe\Aut2exe.exe') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
+      # - name: Cache
+      #   id: cache
+      #   uses: actions/cache@v3
+      #   env:
+      #     cache-name: cache
+      #   with:
+      #     path: C:\"Program Files (x86)"\AutoIt3\Aut2Exe\
+      #     key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('C:\"Program Files (x86)"\AutoIt3\Aut2Exe\Aut2exe.exe') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-build-${{ env.cache-name }}-
+      #       ${{ runner.os }}-build-
+      #       ${{ runner.os }}-
 
       - name: Prepare files
         run: |
@@ -40,10 +40,8 @@ jobs:
 
       - name: Install Autoit
         run: |
-          if (!(Test-Path "C:\Program Files (x86)\AutoIt3\Aut2Exe\Aut2exe.exe")) { 
-            cd compiler
-            ./autoit-v3-setup.exe /S 
-          }
+          cd compiler
+          ./autoit-v3-setup.exe /S 
 
       - name: Compile
         run: |
