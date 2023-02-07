@@ -1,4 +1,4 @@
-name: Crawler
+name: CI
 on: 
   push:
   schedule:
@@ -7,7 +7,7 @@ permissions:
   contents: write
 jobs:
   build-and-deploy:
-    concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
+    concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession. 
     runs-on: windows-latest
     steps:
 
@@ -20,10 +20,13 @@ jobs:
 
       - name: Compile
         run: |
-           wget -Uri https://pulipulichen.github.io/action-AutoIT-Builder/input/input.au3 -OutFile C:\"Program Files (x86)"\AutoIt3\Aut2Exe\input\input.au3
-           wget -Uri https://pulipulichen.github.io/action-AutoIT-Builder/input/input.ico -OutFile C:\"Program Files (x86)"\AutoIt3\Aut2Exe\input\input.ico
-           cd C:\"Program Files (x86)"\AutoIt3\Aut2Exe
-           ./Aut2exe.exe /in "input/input.au3" /out output/input.exe /icon input/input.ico /comp 4 /x64
+          Start-Sleep -s 10
+          mkdir C:\"Program Files (x86)"\AutoIt3\Aut2Exe\input
+          mkdir C:\"Program Files (x86)"\AutoIt3\Aut2Exe\output
+          Invoke-WebRequest -Uri https://pulipulichen.github.io/action-AutoIT-Builder/input/input.au3 -OutFile C:\"Program Files (x86)"\AutoIt3\Aut2Exe\input\input.au3
+          Invoke-WebRequest -Uri https://pulipulichen.github.io/action-AutoIT-Builder/input/input.ico -OutFile C:\"Program Files (x86)"\AutoIt3\Aut2Exe\input\input.ico
+          cd C:\"Program Files (x86)"\AutoIt3\Aut2Exe
+          ./Aut2exe.exe /in "input/input.au3" /out output/input.exe /icon input/input.ico /comp 4 /x64
           #  Start-Sleep -s 10
           #  Move-Item tools build
 
