@@ -50,12 +50,16 @@ jobs:
           cd C:\"Program Files (x86)"\AutoIt3\Aut2Exe
           ./Aut2exe.exe /in "input/input.au3" /out output/input.exe /icon input/input.ico /comp 4 /x64
 
-      - name: Dynamically set MY_DATE environment variable
-        run: echo "{date}={$(date +'%Y-%m-%d')}" >> $GITHUB_ENV
+      - name: Get current time
+        uses: josStorer/get-current-time@v2.0.2
+        id: current-time
+        with:
+          format: YYYYMMDD-HH
+          utcOffset: "+08:00"
 
       - name: Upload
         uses: actions/upload-artifact@v2
         with:
-          name: AutoITBuilder_${{ env.date }}
+          name: AutoITBuilder_${{ steps.current-time.outputs.time }}
           path: C:\Program Files (x86)\AutoIt3\Aut2Exe\output
           if-no-files-found: error
