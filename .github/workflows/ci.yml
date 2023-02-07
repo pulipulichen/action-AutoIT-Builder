@@ -10,29 +10,31 @@ jobs:
     concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession. 
     runs-on: windows-latest
     steps:
+      # ----------------------------------------------------------------
+
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+
+      - name: Prepare files
+        run: |
+          mkdir C:\"Program Files (x86)"\AutoIt3\Aut2Exe\input
+          mkdir C:\"Program Files (x86)"\AutoIt3\Aut2Exe\output
+          Copy-Item "input\*" -Destination C:\"Program Files (x86)"\AutoIt3\Aut2Exe\input
 
       # ----------------------------------------------------------------
 
       - name: Install Autoit
         run: |
-          Invoke-WebRequest -Uri https://www.autoitscript.com/cgi-bin/getfile.pl?autoit3/autoit-v3-setup.exe -OutFile autoit-v3-setup.exe
-          ./autoit-v3-setup.exe /S
+          ./compiler/autoit-v3-setup.exe /S
 
       - name: Compile
         run: |
-          Start-Sleep -s 10
-          mkdir C:\"Program Files (x86)"\AutoIt3\Aut2Exe\input
-          mkdir C:\"Program Files (x86)"\AutoIt3\Aut2Exe\output
-          Invoke-WebRequest -Uri https://pulipulichen.github.io/action-AutoIT-Builder/input/input.au3 -OutFile C:\"Program Files (x86)"\AutoIt3\Aut2Exe\input\input.au3
-          Invoke-WebRequest -Uri https://pulipulichen.github.io/action-AutoIT-Builder/input/input.ico -OutFile C:\"Program Files (x86)"\AutoIt3\Aut2Exe\input\input.ico
           cd C:\"Program Files (x86)"\AutoIt3\Aut2Exe
           ./Aut2exe.exe /in "input/input.au3" /out output/input.exe /icon input/input.ico /comp 4 /x64
-          #  Start-Sleep -s 10
-          #  Move-Item tools build
 
       - name: Upload
         uses: actions/upload-artifact@v2
         with:
-          name: AutoITBuilder
+          name: AutoITBuilder_${{ steps.date.outputs.date }}
           path: C:\Program Files (x86)\AutoIt3\Aut2Exe\output
           if-no-files-found: error
