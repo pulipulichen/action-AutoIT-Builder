@@ -17,6 +17,19 @@ jobs:
 
       # ----------------------------------------------------------------
 
+      - name: Cache
+        id: cache
+        uses: actions/cache@v3
+        env:
+          cache-name: cache
+        with:
+          path: C:\"Program Files (x86)"\AutoIt3\Aut2Exe\
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('C:\"Program Files (x86)"\AutoIt3\Aut2Exe\Aut2exe.exe') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
       - name: Prepare files
         run: |
           mkdir C:\"Program Files (x86)"\AutoIt3\Aut2Exe\input
@@ -41,6 +54,6 @@ jobs:
       - name: Upload
         uses: actions/upload-artifact@v2
         with:
-          name: AutoITBuilder_${{ GITHUB_SHA }}
+          name: AutoITBuilder_${{ github.event.pull_request.head.sha }}
           path: C:\Program Files (x86)\AutoIt3\Aut2Exe\output
           if-no-files-found: error
