@@ -2,7 +2,7 @@
 #include <MsgBoxConstants.au3>
 #include <FileConstants.au3>
 
-Global $sPROJECT_NAME = "docker-app-PDF-remove-Annotations"
+Global $sPROJECT_NAME = "docker-app-Filename-remove-Hyphen-Mark"
 Global $sFILE_EXT = "Images (*.*)"
 
 ;~ MsgBox($MB_SYSTEMMODAL, "Title", "This message box will timeout after 10 seconds or select the OK button.", 10)
