@@ -1,9 +1,8 @@
-# https://github.dev/pulipulichen/action-AutoIT-Builder
 #include <MsgBoxConstants.au3>
 #include <FileConstants.au3>
 
-Global $sPROJECT_NAME = "docker-app-Filename-remove-Hyphen-Mark"
-Global $sFILE_EXT = "Images (*.*)"
+Global $sPROJECT_NAME = "docker-app-Archive-List"
+Global $sFILE_EXT = "All (*.*)"
 
 ;~ MsgBox($MB_SYSTEMMODAL, "Title", "This message box will timeout after 10 seconds or select the OK button.", 10)
 Local $sWorkingDir = @WorkingDir
