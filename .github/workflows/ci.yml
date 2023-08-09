@@ -50,11 +50,6 @@ jobs:
         run: |
           c:
           cd /d "C:\Program Files (x86)\AutoIt3\Aut2Exe"
-          if exist Aut2exe.exe (
-              echo Aut2exe.exe exists in the directory.
-          ) else (
-              echo Aut2exe.exe does not exist in the directory.
-          )
           dir
           Aut2exe.exe /in "input/input.au3" /out output/input.exe /icon input/input.ico /comp 4 /x64
 
