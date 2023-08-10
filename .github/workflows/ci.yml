@@ -17,18 +17,18 @@ jobs:
 
       # ----------------------------------------------------------------
 
-      # - name: Cache
-      #   id: cache
-      #   uses: actions/cache@v3
-      #   env:
-      #     cache-name: cache
-      #   with:
-      #     path: C:\"Program Files (x86)"\AutoIt3\Aut2Exe\
-      #     key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('C:\"Program Files (x86)"\AutoIt3\Aut2Exe\Aut2exe.exe') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-build-${{ env.cache-name }}-
-      #       ${{ runner.os }}-build-
-      #       ${{ runner.os }}-
+      - name: Cache
+        id: cache
+        uses: actions/cache@v3
+        env:
+          cache-name: cache
+        with:
+          path: C:\"Program Files (x86)"\AutoIt3\Aut2Exe\
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('C:\"Program Files (x86)"\AutoIt3\Aut2Exe\Aut2exe.exe') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
 
       - name: Prepare files
         run: |
@@ -50,8 +50,28 @@ jobs:
         run: |
           c:
           cd "C:\Program Files (x86)\AutoIt3\Aut2Exe"
-          dir
-          ./Aut2exe_x64.exe /in "input/input.au3" /out output/input.exe /icon input/input.ico /comp 4 /x64
+          
+          setlocal
+
+          set "sourceDir=C:\Program Files (x86)\AutoIt3\Aut2Exe"
+          set "outputDir=output"
+          set "iconDir=input"
+
+          for %%F in ("%sourceDir%\*.au3") do (
+              set "filename=%%~nF"
+              setlocal enabledelayedexpansion
+              call :buildCommand "!filename!"
+              endlocal
+          )
+
+          exit /b
+
+          :buildCommand
+          set "filename=%1"
+          set "command=./Aut2exe_x64.exe /in \"%sourceDir%\%filename%.au3\" /out \"%outputDir%\%filename%.exe\" /icon \"%iconDir%\%filename%.ico\" /comp 4 /x64"
+          echo %command%
+          %command%
+          exit /b
 
       - name: Get current time
         uses: josStorer/get-current-time@v2.0.2
