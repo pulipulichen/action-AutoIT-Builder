@@ -51,27 +51,18 @@ jobs:
           c:
           cd "C:\Program Files (x86)\AutoIt3\Aut2Exe"
           
-          setlocal
+          $sourceDir = "C:\Program Files (x86)\AutoIt3\Aut2Exe"
+          $outputDir = "output"
+          $iconDir = "input"
 
-          set "sourceDir=C:\Program Files (x86)\AutoIt3\Aut2Exe"
-          set "outputDir=output"
-          set "iconDir=input"
+          $au3Files = Get-ChildItem -Path "$sourceDir\*.au3"
 
-          for %%F in ("%sourceDir%\*.au3") do (
-              set "filename=%%~nF"
-              setlocal enabledelayedexpansion
-              call :buildCommand "!filename!"
-              endlocal
-          )
-
-          exit /b
-
-          :buildCommand
-          set "filename=%1"
-          set "command=./Aut2exe_x64.exe /in \"%sourceDir%\%filename%.au3\" /out \"%outputDir%\%filename%.exe\" /icon \"%iconDir%\%filename%.ico\" /comp 4 /x64"
-          echo %command%
-          %command%
-          exit /b
+          foreach ($au3File in $au3Files) {
+              $filename = [System.IO.Path]::GetFileNameWithoutExtension($au3File.Name)
+              $command = "./Aut2exe_x64.exe /in `"$sourceDir\$($au3File.Name)`" /out `"$outputDir\$filename.exe`" /icon `"$iconDir\$filename.ico`" /comp 4 /x64"
+              Write-Host "Running: $command"
+              Invoke-Expression $command
+          }
 
       - name: Get current time
         uses: josStorer/get-current-time@v2.0.2
