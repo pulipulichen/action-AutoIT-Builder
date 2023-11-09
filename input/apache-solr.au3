@@ -173,7 +173,7 @@ Func setDockerComposeYML($file)
 
 	$dirname = StringReplace($dirname, '\', "/")
 		
-	MsgBox($MB_SYSTEMMODAL, "Title", $dirname, 10)
+	;MsgBox($MB_SYSTEMMODAL, "Title", $dirname, 10)
 
 	
     Local $template = FileRead($sProjectFolder & "\docker-build\image\docker-compose-template.yml")
@@ -282,6 +282,6 @@ If $INPUT_FILE = 1 Then
 	EndIf
 Else
 	FileChangeDir($sProjectFolder)
-	setDockerComposeYML('"' & @ScriptDir & '"')
+	setDockerComposeYML('"' & @ScriptFullPath & '"')
 	runDockerCompose()
 EndIf
