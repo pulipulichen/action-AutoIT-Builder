@@ -147,9 +147,9 @@ Func getCloudflarePublicURL()
     WEnd
 
     Local $fileContent = FileRead($cloudflareFile)
-	While StringStripWS($fileContent, 1 + 2) = ""
-        Sleep(3000) ; Check every 1 second
-		$fileContent = FileRead($cloudflareFile)
+		While StringStripWS($fileContent, 1 + 2) = ""
+      Sleep(3000) ; Check every 1 second
+			$fileContent = FileRead($cloudflareFile)
     WEnd
 	;ConsoleWrite($fileContent  & @CRLF)
     Return $fileContent
@@ -159,10 +159,14 @@ EndFunc
 
 Func setDockerComposeYML($file)
 	;ConsoleWrite($file)
+	$file = StringReplace($file, "\", "/")
+
+
     Local $dirname = StringLeft($file, StringInStr($file, "\", 0, -1) - 1)
 	If StringLeft($dirname, 1) = '"' Then
 		$dirname = StringTrimLeft($dirname, 1)
 	EndIf
+		
 	
     Local $filename = StringMid($file, StringInStr($file, "\", 0, -1) + 1)
 
