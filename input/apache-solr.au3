@@ -9,9 +9,12 @@ Global $sPROJECT_NAME = "docker-web-Apache-Solr"
 
 ;~ MsgBox($MB_SYSTEMMODAL, "Title", "This message box will timeout after 10 seconds or select the OK button.", 10)
 Local $sProjectFolder = @HomeDrive & @HomePath & "\docker-app\" & $sPROJECT_NAME
+Local $inited = 1
 If Not FileExists($sProjectFolder) then
+	$inited = 0
 	MsgBox($MB_SYSTEMMODAL, $sPROJECT_NAME, "Before executing the script, it is recommended to either disable your antivirus software or add this script to the antivirus software's whitelist to prevent any unintended issues.", 30)
 EndIf
+
 Local $sWorkingDir = @WorkingDir
 
 ;~ ---------------------
@@ -170,6 +173,16 @@ Func getCloudflarePublicURL()
 		Return false
 EndFunc
 
+Func waitForDockerAppReady()
+	;ConsoleWrite("getCloudflarePublicURL"  & @CRLF)
+    Local $dirname = @ScriptDir
+    
+    Local $readyFile = $dirname & "" & $sPROJECT_NAME & "\.docker-web.ready"
+    While Not FileExists($readyFile)
+	    Sleep(3000)
+    WEnd
+EndFunc
+
 Func setCloudflareFailed()
 	Local $dirname = @ScriptDir
 	; Specify the file path
@@ -274,7 +287,7 @@ Func runDockerCompose()
 	
 	Local $cloudflare_url=getCloudflarePublicURL()
 
-	Sleep(1000)
+	waitForDockerAppReady()
 
 	ConsoleWrite("================================================================" & @CRLF)
 	ConsoleWrite("You can link the website via following URL:" & @CRLF)
@@ -290,14 +303,16 @@ Func runDockerCompose()
 	ConsoleWrite("Press Ctrl+C to stop the Docker container and exit." & @CRLF)
 	ConsoleWrite("================================================================" & @CRLF)
 	
-	Sleep(3000)
+	;Sleep(3000)
 	;ShellExecute($cloudflare_url, "", "open", @SW_HIDE)
 	
-
+	
 	If $cloudflare_url <> false Then
 		ShellExecute($cloudflare_url)
-	Else
+		Sleep(3000)
+	ElseIf $inited = 0 Then
 		ShellExecute("http://127.0.0.1:" & $PUBLIC_PORT)
+		Sleep(3000)
 	EndIf
 	
 	; Display a message box with the OK button
@@ -311,7 +326,7 @@ EndFunc
 
 ;~ ---------------------
 
-ToolTip($sPROJECT_NAME & " is running", 0, 0)
+TrayTip("Docker APP", $sPROJECT_NAME & " is running", 60, 1)
 If $INPUT_FILE = 1 Then 
 	If $sUseParams = true Then
 		For $i = 1 To $CmdLine[0]
@@ -345,4 +360,3 @@ Else
 	setDockerComposeYML(@ScriptFullPath)
 	runDockerCompose()
 EndIf
-ToolTip("") ; Clear the tooltip
