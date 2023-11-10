@@ -40,7 +40,7 @@ jobs:
 
       - name: Convert Image to ICO
         run: |
-            c:
+            
             cd "C:\Program Files (x86)\AutoIt3\Aut2Exe"
             
             $sourceDir = "C:\Program Files (x86)\AutoIt3\Aut2Exe"
@@ -56,24 +56,10 @@ jobs:
                 $sourceFilePath = $inputImagePath
                 $icoFilePath = "$sourceDir\$inputDir\$inputFilenameNoExt.ico"
 
-                $originalBitmap = [System.Drawing.Bitmap]::FromFile($sourceFilePath)
-
-                # Resize the image to 64x64
-                $resizedBitmap = New-Object System.Drawing.Bitmap(64, 64)
-                $graphics = [System.Drawing.Graphics]::FromImage($resizedBitmap)
-                $graphics.DrawImage($originalBitmap, 0, 0, 64, 64)
-
-                # Create a new icon with the resized image
-                $icon = [System.Drawing.Icon]::FromHandle($resizedBitmap.GetHicon())
-
-                # Save the icon to the ICO file
-                $icon.Save($icoFilePath)
-
-                # Dispose of the bitmap and icon objects
-                $originalBitmap.Dispose()
-                $resizedBitmap.Dispose()
-                $icon.Dispose()
+                ".\compiler\ImageMagick-7.1.1-21-Q16-HDRI-x64-dll.exe" convert "$sourceFilePath" -resize 64x64 "$icoFilePath"
             }
+
+            # --------
   
             # Declare an array
             $imageTypes = @("png", "gif", "jpg", "jpeg", "webp")
@@ -87,6 +73,10 @@ jobs:
               }
             }
 
+            # ---------
+
+            c:
+            cd "C:\Program Files (x86)\AutoIt3\Aut2Exe"
             dir
       
       # ----------------------------------------------------------------
