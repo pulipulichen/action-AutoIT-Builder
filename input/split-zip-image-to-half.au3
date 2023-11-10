@@ -1,7 +1,7 @@
 #include <MsgBoxConstants.au3>
 #include <FileConstants.au3>
 
-Global $sPROJECT_NAME = "docker-app-Image-Trim"
+Global $sPROJECT_NAME = "docker-app-ZIP-Image-Half-Splitter"
 
 ;~ ---------------------
 
