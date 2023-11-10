@@ -6,8 +6,10 @@ Global $sPROJECT_NAME = "docker-app-ZIP-Image-Half-Splitter"
 ;~ ---------------------
 
 ;~ MsgBox($MB_SYSTEMMODAL, "Title", "This message box will timeout after 10 seconds or select the OK button.", 10)
-
-MsgBox($MB_SYSTEMMODAL, $sPROJECT_NAME, "Before executing the script, it is recommended to either disable your antivirus software or add this script to the antivirus software's whitelist to prevent any unintended issues.", 30)
+Local $sProjectFolder = @HomeDrive & @HomePath & "\docker-app\" & $sPROJECT_NAME
+If Not FileExists($sProjectFolder) then
+	MsgBox($MB_SYSTEMMODAL, $sPROJECT_NAME, "Before executing the script, it is recommended to either disable your antivirus software or add this script to the antivirus software's whitelist to prevent any unintended issues.", 30)
+EndIf
 Local $sWorkingDir = @WorkingDir
 
 ;~ ---------------------
@@ -37,7 +39,7 @@ EndIf
 ;~ ---------------------
 
 ;Local $sProjectFolder = @TempDir & "\" & $sPROJECT_NAME
-Local $sProjectFolder = @HomeDrive & @HomePath & "\docker-app\" & $sPROJECT_NAME
+
 ;~ MsgBox($MB_SYSTEMMODAL, FileExists($sProjectFolder), $sProjectFolder)
 ShellExecuteWait("git", "config --global core.autocrlf false", "", "open", @SW_HIDE)
 If Not FileExists($sProjectFolder) Then
@@ -125,7 +127,7 @@ If $INPUT_FILE = 1 Then
 	If $CmdLine[0] = 0 Then
 		$sUseParams = false
 		Local $sMessage = "Select File"
-		Local $sFileOpenDialog = FileOpenDialog($sMessage, @DesktopDir & "\", $sFILE_EXT , $FD_FILEMUSTEXIST + $FD_MULTISELECT)
+		Local $sFileOpenDialog = FileOpenDialog($sMessage, @ScriptDir & "\", $sFILE_EXT , $FD_FILEMUSTEXIST + $FD_MULTISELECT)
 		$sFiles = StringSplit($sFileOpenDialog, "|")
 	EndIf
 EndIf
@@ -158,28 +160,30 @@ EndFunc
 Func setDockerComposeYML($file)
 	;ConsoleWrite($file)
 	;$file = StringReplace($file, "\\", "/")
-	;MsgBox($MB_SYSTEMMODAL, "Title", $file, 10)
+	;MsgBox($MB_SYSTEMMODAL, "Title " & FileExists($file), $file, 10)
+
+	Local $template = FileRead($sProjectFolder & "\docker-build\image\docker-compose-template.yml")
+	If FileExists($file) Then
+
+	  Local $dirname = StringLeft($file, StringInStr($file, "\", 0, -1) - 1)
+		If StringLeft($dirname, 1) = '"' Then
+			$dirname = StringTrimLeft($dirname, 1)
+		EndIf
+	  
+		Local $filename = StringMid($file, StringInStr($file, "\", 0, -1) + 1)
 
 
-  Local $dirname = StringLeft($file, StringInStr($file, "\", 0, -1) - 1)
-	If StringLeft($dirname, 1) = '"' Then
-		$dirname = StringTrimLeft($dirname, 1)
-	EndIf
-  
-	Local $filename = StringMid($file, StringInStr($file, "\", 0, -1) + 1)
+		$dirname = StringReplace($dirname, '\', "/")
+			
+		;MsgBox($MB_SYSTEMMODAL, "Title", $dirname, 10)
 
-
-	$dirname = StringReplace($dirname, '\', "/")
 		
-	;MsgBox($MB_SYSTEMMODAL, "Title", $dirname, 10)
-
-	
-    Local $template = FileRead($sProjectFolder & "\docker-build\image\docker-compose-template.yml")
-	;ConsoleWrite($template)
-	
-    $template = StringReplace($template, "[SOURCE]", $dirname)
-    $template = StringReplace($template, "[INPUT]", $filename)
-
+		;Local $template = FileRead($sProjectFolder & "\docker-build\image\docker-compose-template.yml")
+		;ConsoleWrite($template)
+		
+		$template = StringReplace($template, "[SOURCE]", $dirname)
+		$template = StringReplace($template, "[INPUT]", $filename)
+	EndIf
 	FileDelete($sProjectFolder & "\docker-compose.yml")
     FileWrite($sProjectFolder & "\docker-compose.yml", $template)
 	;ConsoleWrite($template & @CRLF)
@@ -266,20 +270,23 @@ If $INPUT_FILE = 1 Then
 				EndIf
 			Else
 				; ShellExecuteWait("node", $sProjectFolder & "\index.js" & ' "' & $CmdLine[$i] & '"')
-				setDockerComposeYML('"' & $CmdLine[$i] & '"')
+				setDockerComposeYML($CmdLine[$i])
 				runDockerCompose()
 			EndIf
 		Next
 	Else
 		For $i = 1 To $sFiles[0]
-			FileChangeDir($sProjectFolder)
-			; ShellExecuteWait("node", $sProjectFolder & "\index.js" & ' "' & $sFiles[$i] & '"')
-			setDockerComposeYML('"' & $sFiles[$i] & '"')
-			runDockerCompose()
+			MsgBox($MB_SYSTEMMODAL, $sPROJECT_NAME, $sFiles[$i])
+			If FileExists($sFiles[$i]) Then
+				FileChangeDir($sProjectFolder)
+				; ShellExecuteWait("node", $sProjectFolder & "\index.js" & ' "' & $sFiles[$i] & '"')
+				setDockerComposeYML($sFiles[$i])
+				runDockerCompose()
+			EndIf
 		Next
 	EndIf
 Else
 	FileChangeDir($sProjectFolder)
-	setDockerComposeYML('"' & @ScriptFullPath & '"')
+	setDockerComposeYML(@ScriptFullPath)
 	runDockerCompose()
 EndIf
