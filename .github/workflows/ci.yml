@@ -49,11 +49,11 @@ jobs:
   
             function Convert-ImgToIco {
                 param (
-                    [string]$input
+                    [string]$inputImagePath
                 )
 
-                $inputFilenameNoExt = [System.IO.Path]::GetFileNameWithoutExtension($input)
-                $sourceFilePath = "$sourceDir\$inputDir\$input"
+                $inputFilenameNoExt = [System.IO.Path]::GetFileNameWithoutExtension($inputImagePath)
+                $sourceFilePath = $inputImagePath
                 $icoFilePath = "$sourceDir\$inputDir\$inputFilenameNoExt.ico"
 
                 Write-Host $sourceFilePath
@@ -83,7 +83,7 @@ jobs:
               $files = Get-ChildItem -Path "$sourceDir\$inputDir\*.$type"
               foreach ($file in $files) {
                 Write-Host $file
-                Convert-ImgToIco -input "$file"
+                Convert-ImgToIco -inputImagePath "$file"
               }
             }
 
