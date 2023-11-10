@@ -46,6 +46,67 @@ jobs:
             Start-Sleep -s 3
           }
 
+      - name: Convert Image to ICO
+        run: |
+            c:
+            cd "C:\Program Files (x86)\AutoIt3\Aut2Exe"
+            
+            $sourceDir = "C:\Program Files (x86)\AutoIt3\Aut2Exe"
+            $outputDir = "output"
+            $inputDir = "input"
+  
+            function Convert-ImgToIco {
+                param (
+                    [string]$input,
+                )
+
+                $inputFilenameNoExt = [System.IO.Path]::GetFileNameWithoutExtension($input)
+                $sourceFilePath = "$sourceDir\$inputDir\$input"
+                $icoFilePath = "$sourceDir\$inputDir\$inputFilenameNoExt.ico"
+
+                # Load the PNG file as a bitmap
+                $bitmap = [System.Drawing.Bitmap]::FromFile($sourceFilePath)
+
+                # Create a new icon with a 64x64 size
+                $icon = New-Object System.Drawing.Icon($bitmap, 64, 64)
+
+                # Save the icon to the ICO file
+                $icon.Save($icoFilePath)
+
+                # Dispose of the bitmap and icon objects
+                $bitmap.Dispose()
+                $icon.Dispose()
+
+                Write-Host "Conversion complete. Icon saved to: $icoFilePath"
+            }
+  
+            $files = Get-ChildItem -Path "$sourceDir\$inputDir\*.png"
+            foreach ($file in $files) {
+                Convert-PngToIco -input $file.Name
+            }
+
+            $files = Get-ChildItem -Path "$sourceDir\$inputDir\*.gif"
+            foreach ($file in $files) {
+                Convert-PngToIco -input $file.Name
+            }
+
+            $files = Get-ChildItem -Path "$sourceDir\$inputDir\*.jpg"
+            foreach ($file in $files) {
+                Convert-PngToIco -input $file.Name
+            }
+
+            $files = Get-ChildItem -Path "$sourceDir\$inputDir\*.jpeg"
+            foreach ($file in $files) {
+                Convert-PngToIco -input $file.Name
+            }
+
+            $files = Get-ChildItem -Path "$sourceDir\$inputDir\*.webp"
+            foreach ($file in $files) {
+                Convert-PngToIco -input $file.Name
+            }
+            
+            dir
+
       - name: Compile
         run: |
           c:
