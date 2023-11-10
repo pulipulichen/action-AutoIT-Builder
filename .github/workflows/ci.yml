@@ -41,8 +41,6 @@ jobs:
       - name: Convert Image to ICO
         run: |
             
-            cd "C:\Program Files (x86)\AutoIt3\Aut2Exe"
-            
             $sourceDir = "C:\Program Files (x86)\AutoIt3\Aut2Exe"
             $outputDir = "output"
             $inputDir = "input"
@@ -55,8 +53,8 @@ jobs:
                 $inputFilenameNoExt = [System.IO.Path]::GetFileNameWithoutExtension($inputImagePath)
                 $sourceFilePath = $inputImagePath
                 $icoFilePath = "$sourceDir\$inputDir\$inputFilenameNoExt.ico"
+                ".\tool\ImageMagick-7.1.1-21-portable-Q16-x64\magick.exe" convert "$sourceFilePath" -resize 64x64 "$icoFilePath"
 
-                ".\compiler\ImageMagick-7.1.1-21-Q16-HDRI-x64-dll.exe" convert "$sourceFilePath" -resize 64x64 "$icoFilePath"
             }
 
             # --------
