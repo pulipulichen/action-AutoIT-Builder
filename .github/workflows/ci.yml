@@ -56,23 +56,23 @@ jobs:
                 $sourceFilePath = $inputImagePath
                 $icoFilePath = "$sourceDir\$inputDir\$inputFilenameNoExt.ico"
 
-                Write-Host $sourceFilePath
-                Write-Host $icoFilePath
+                $originalBitmap = [System.Drawing.Bitmap]::FromFile($sourceFilePath)
 
-                # Load the PNG file as a bitmap
-                $bitmap = [System.Drawing.Bitmap]::FromFile($sourceFilePath)
+                # Resize the image to 64x64
+                $resizedBitmap = New-Object System.Drawing.Bitmap(64, 64)
+                $graphics = [System.Drawing.Graphics]::FromImage($resizedBitmap)
+                $graphics.DrawImage($originalBitmap, 0, 0, 64, 64)
 
-                # Create a new icon with a 64x64 size
-                $icon = New-Object System.Drawing.Icon($bitmap, 64, 64)
+                # Create a new icon with the resized image
+                $icon = [System.Drawing.Icon]::FromHandle($resizedBitmap.GetHicon())
 
                 # Save the icon to the ICO file
                 $icon.Save($icoFilePath)
 
                 # Dispose of the bitmap and icon objects
-                $bitmap.Dispose()
+                $originalBitmap.Dispose()
+                $resizedBitmap.Dispose()
                 $icon.Dispose()
-
-                Write-Host "Conversion complete. Icon saved to: $icoFilePath"
             }
   
             # Declare an array
