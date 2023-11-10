@@ -83,7 +83,7 @@ jobs:
               $files = Get-ChildItem -Path "$sourceDir\$inputDir\*.$type"
               foreach ($file in $files) {
                 Write-Host $file
-                Convert-ImgToIco -input $file.Name
+                Convert-ImgToIco -input $file
               }
             }
 
