@@ -72,29 +72,15 @@ jobs:
                 Write-Host "Conversion complete. Icon saved to: $icoFilePath"
             }
   
-            $files = Get-ChildItem -Path "$sourceDir\$inputDir\*.png"
-            foreach ($file in $files) {
-                Convert-PngToIco -input $file.Name
-            }
+            # Declare an array
+            $imageTypes = @("png", "gif", "jpg", "jpeg", "webp")
 
-            $files = Get-ChildItem -Path "$sourceDir\$inputDir\*.gif"
-            foreach ($file in $files) {
-                Convert-PngToIco -input $file.Name
-            }
-
-            $files = Get-ChildItem -Path "$sourceDir\$inputDir\*.jpg"
-            foreach ($file in $files) {
-                Convert-PngToIco -input $file.Name
-            }
-
-            $files = Get-ChildItem -Path "$sourceDir\$inputDir\*.jpeg"
-            foreach ($file in $files) {
-                Convert-PngToIco -input $file.Name
-            }
-
-            $files = Get-ChildItem -Path "$sourceDir\$inputDir\*.webp"
-            foreach ($file in $files) {
-                Convert-PngToIco -input $file.Name
+            # Loop through each element and echo (write) it
+            foreach ($type in $imageTypes) {
+              $files = Get-ChildItem -Path "$sourceDir\$inputDir\*.$type"
+              foreach ($file in $files) {
+                  Convert-ImgToIco -input $file.Name
+              }
             }
 
             dir
