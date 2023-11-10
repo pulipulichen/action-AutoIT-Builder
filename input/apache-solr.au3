@@ -1,7 +1,9 @@
 #include <MsgBoxConstants.au3>
 #include <FileConstants.au3>
+#include <InetConstants.au3>
+#include <WinAPIFiles.au3>
 
-Global $sPROJECT_NAME = "docker-app-ZIP-Image-Half-Splitter"
+Global $sPROJECT_NAME = "docker-web-Apache-Solr"
 
 ;~ ---------------------
 
@@ -74,7 +76,7 @@ FileCopy($sProjectFolder & "\Dockerfile", $sProjectFolderCache & "\Dockerfile", 
 FileCopy($sProjectFolder & "\package.json", $sProjectFolderCache & "\package.json", $FC_OVERWRITE)
 
 ;~ =================================================================
-;~ 從docker-compose-template.yml來判斷參數
+;~ ?docker-compose-template.yml?????
 
 Local $INPUT_FILE = 0
 
@@ -117,7 +119,7 @@ If FileExists($DOCKER_COMPOSE_FILE) Then
 EndIf
 
 ;~ ---------------------
-;~ 選取檔案
+;~ ????
 
 Global $sFILE_EXT = "* (*.*)"
 
@@ -133,7 +135,7 @@ If $INPUT_FILE = 1 Then
 EndIf
 
 ;~ =================================================================
-;~ 宣告函數
+;~ ????
 
 Func getCloudflarePublicURL()
 	;ConsoleWrite("getCloudflarePublicURL"  & @CRLF)
@@ -141,18 +143,25 @@ Func getCloudflarePublicURL()
 
     Local $cloudflareFile = $dirname & "" & $sPROJECT_NAME & "\.cloudflare.url"
 	;ConsoleWrite($cloudflareFile  & @CRLF)
+		Local $timeout = 120 ; 60 seconds timeout
+		Local $interval = 5 ; 5 seconds interval
+		Local $elapsedTime = 0
 
-    While Not FileExists($cloudflareFile)
-        Sleep(3000) ; Check every 1 second
-    WEnd
+		While $elapsedTime < $timeout
+		    If FileExists($cloudflareFile) Then
+			ConsoleWrite("Existed"  & @CRLF)
+			Local $fileContent = FileRead($cloudflareFile)
+			ConsoleWrite($fileContent  & @CRLF)
+			If StringStripWS($fileContent, 1 + 2) <> "" Then
+			   Return $fileContent
+			EndIf
+		    EndIf
 
-    Local $fileContent = FileRead($cloudflareFile)
-		While StringStripWS($fileContent, 1 + 2) = ""
-      Sleep(3000) ; Check every 1 second
-			$fileContent = FileRead($cloudflareFile)
-    WEnd
-	;ConsoleWrite($fileContent  & @CRLF)
-    Return $fileContent
+		    Sleep($interval * 1000) ; Sleep for $interval seconds
+		    $elapsedTime += $interval
+		WEnd
+
+		Return false
 EndFunc
 
 ;~ ----------------------------------------------------------------
@@ -222,7 +231,7 @@ Func runDockerCompose()
 	RunWait(@ComSpec & " /c docker-compose down")
 	If $PUBLIC_PORT = 0 then
 		RunWait(@ComSpec & " /c docker-compose up --build")
-		Exit(1)
+		Exit(0)
 	Else
 		RunWait(@ComSpec & " /c docker-compose up --build -d")
 	EndIf
@@ -239,8 +248,11 @@ Func runDockerCompose()
 	ConsoleWrite("You can link the website via following URL:" & @CRLF)
 	ConsoleWrite(@CRLF)
 
-	ConsoleWrite($cloudflare_url)
+	If $cloudflare_url <> false Then
+		ConsoleWrite($cloudflare_url)
+	EndIf
 	ConsoleWrite("http://127.0.0.1:" & $PUBLIC_PORT & @CRLF)
+		
 
 	ConsoleWrite(@CRLF)
 	ConsoleWrite("Press Ctrl+C to stop the Docker container and exit." & @CRLF)
@@ -248,11 +260,21 @@ Func runDockerCompose()
 	
 	Sleep(3000)
 	;ShellExecute($cloudflare_url, "", "open", @SW_HIDE)
-	ShellExecute($cloudflare_url)
 	
-	While True
-    Sleep(5000) ; Sleep for 1 second (1000 milliseconds)
-	WEnd
+
+	If $cloudflare_url <> false Then
+		ShellExecute($cloudflare_url)
+	Else
+		ShellExecute("http://127.0.0.1:" & $PUBLIC_PORT)
+	EndIf
+	
+	; Display a message box with the OK button
+	MsgBox(0, $sPROJECT_NAME, "Server is running. Click OK to exit the script.")
+	
+	RunWait(@ComSpec & " /c docker-compose down")
+
+	; Exit the script
+	Exit(0)
 EndFunc
 
 ;~ ---------------------
