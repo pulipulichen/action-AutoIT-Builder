@@ -80,7 +80,7 @@ jobs:
             # ---------
 
             c:
-            cd "C:\Program Files (x86)\AutoIt3\Aut2Exe"
+            cd "C:\Program Files (x86)\AutoIt3\Aut2Exe\input"
             dir
       
       # ----------------------------------------------------------------
