@@ -1,7 +1,9 @@
 #include <MsgBoxConstants.au3>
 #include <FileConstants.au3>
+#include <InetConstants.au3>
+#include <WinAPIFiles.au3>
 
-Global $sPROJECT_NAME = "docker-app-ZIP-Image-Half-Splitter"
+Global $sPROJECT_NAME = "docker-web-Apache-Solr"
 
 ;~ ---------------------
 
