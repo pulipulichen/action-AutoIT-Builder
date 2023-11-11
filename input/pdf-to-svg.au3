@@ -1,9 +1,7 @@
 #include <MsgBoxConstants.au3>
 #include <FileConstants.au3>
-#include <InetConstants.au3>
-#include <WinAPIFiles.au3>
 
-Global $sPROJECT_NAME = "docker-web-Apache-Solr"
+Global $sPROJECT_NAME = "docker-app-PDF-to-Crop-SVG"
 
 ;~ ---------------------
 
@@ -85,7 +83,7 @@ Local $INPUT_FILE = 0
 
 If FileExists($sProjectFolder & "\docker-build\image\docker-compose-template.yml") Then
   Local $fileContent = FileRead($sProjectFolder & "\docker-build\image\docker-compose-template.yml")
-  If StringInStr($fileContent, "[INPUT]") Then
+  If StringInStr($fileContent, "__INPUT__") Then
     $INPUT_FILE = 1
   EndIf
 EndIf
