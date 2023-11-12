@@ -3,7 +3,7 @@
 #include <InetConstants.au3>
 #include <WinAPIFiles.au3>
 
-Global $sPROJECT_NAME = "docker-web-Apache-Solr"
+Global $sPROJECT_NAME = "docker-app-iClass-PDF-Scoring"
 
 ;~ ---------------------
 ; Lock
