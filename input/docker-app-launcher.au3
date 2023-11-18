@@ -3,7 +3,11 @@
 #include <InetConstants.au3>
 #include <WinAPIFiles.au3>
 
-Global $sPROJECT_NAME = "docker-app-iClass-PDF-Scoring"
+If $CmdLine[0] = 0 Then
+	Exit
+EndIf
+
+Global $sPROJECT_NAME = $CmdLine[1]
 
 ;~ ---------------------
 ; Lock
@@ -379,7 +383,7 @@ EndFunc
 TrayTip("Docker APP", $sPROJECT_NAME & " is running", 60, 1)
 If $INPUT_FILE = 1 Then 
 	If $sUseParams = true Then
-		For $i = 1 To $CmdLine[0]
+		For $i = 3 To $CmdLine[0]
 			If Not FileExists($CmdLine[$i]) Then
 				If Not FileExists($sWorkingDir & "/" & $CmdLine[$i]) Then
 					MsgBox($MB_SYSTEMMODAL, $sPROJECT_NAME, "File not found: " & $CmdLine[$i])
@@ -407,7 +411,8 @@ If $INPUT_FILE = 1 Then
 	EndIf
 Else
 	FileChangeDir($sProjectFolder)
-	setDockerComposeYML(@ScriptFullPath)
+	$ScriptFullPath = $CmdLine[2]
+	setDockerComposeYML($ScriptFullPath)
 	runDockerCompose()
 EndIf
 
