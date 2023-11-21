@@ -2,9 +2,8 @@
 #include <FileConstants.au3>
 #include <InetConstants.au3>
 #include <WinAPIFiles.au3>
-#include <Array.au3>
 
-Global $sPROJECT_NAME = "docker-app-Image-Trim"
+Global $sPROJECT_NAME = "docker-app-iClass-PDF-Scoring"
 
 ; =================================================================
 
