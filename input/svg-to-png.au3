@@ -1,7 +1,7 @@
 #include <MsgBoxConstants.au3>
 #include <FileConstants.au3>
 
-Global $sPROJECT_NAME = "docker-app-PDF-to-Crop-SVG"
+Global $sPROJECT_NAME = "docker-app-SVG-to-PNG"
 
 ; =================================================================
 
