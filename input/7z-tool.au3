@@ -1,7 +1,10 @@
 #include <MsgBoxConstants.au3>
 #include <FileConstants.au3>
+#include <InetConstants.au3>
+#include <WinAPIFiles.au3>
+#include <Array.au3>
 
-Global $sPROJECT_NAME = "docker-app-SVG-to-PNG"
+Global $sPROJECT_NAME = "docker-app-Archive-7-zip"
 
 ; =================================================================
 
