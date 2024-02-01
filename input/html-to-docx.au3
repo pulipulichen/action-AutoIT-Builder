@@ -1,10 +1,7 @@
 #include <MsgBoxConstants.au3>
 #include <FileConstants.au3>
-#include <InetConstants.au3>
-#include <WinAPIFiles.au3>
-#include <Array.au3>
 
-Global $sPROJECT_NAME = "docker-app-MEME-PAM-Analyzer"
+Global $sPROJECT_NAME = "docker-app-HTML-to-DOCX"
 
 ; =================================================================
 
