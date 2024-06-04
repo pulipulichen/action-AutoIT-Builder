@@ -4,7 +4,7 @@
 #include <WinAPIFiles.au3>
 #include <Array.au3>
 
-Global $sPROJECT_NAME = "docker-web-Apache-Solr"
+Global $sPROJECT_NAME = "docker-web-Voyant-Tools"
 
 ; =================================================================
 
