@@ -1,11 +1,8 @@
+# https://github.dev/pulipulichen/action-AutoIT-Builder
 #include <MsgBoxConstants.au3>
 #include <FileConstants.au3>
 
-Global $sPROJECT_NAME = "docker-app-Folder-List"
-Global $sFILE_EXT = "All (*.*)"
-
-;~ MsgBox($MB_SYSTEMMODAL, "Title", "This message box will timeout after 10 seconds or select the OK button.", 10)
-Local $sWorkingDir = @WorkingDir
+Global $sPROJECT_NAME = "docker-app-PDF-remove-Annotations"
 
 ; =================================================================
 
