@@ -2,7 +2,7 @@
 #include <MsgBoxConstants.au3>
 #include <FileConstants.au3>
 
-Global $sPROJECT_NAME = "docker-app-PDF-Annotation-Remover"
+Global $sPROJECT_NAME = "docker-app-Document-to-Markdown"
 
 ; =================================================================
 
