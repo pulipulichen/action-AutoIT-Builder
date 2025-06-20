@@ -4,7 +4,7 @@
 #include <WinAPIFiles.au3>
 #include <Array.au3>
 
-Global $sPROJECT_NAME = "docker-app-Folder-to-FTP"
+Global $sPROJECT_NAME = "docker-app-Image-to-SVG"
 
 ; =================================================================
 
